@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 # Get the currently active user model
 UserModel = get_user_model()
@@ -19,6 +20,16 @@ class CustomUserCreationForm(UserCreationForm):
         model = UserModel
         # Specify the fields to display on the signup form
         fields = ("username", "email")
+
+    def clean_email(self):
+        """
+        Validate that the email is not already in use.
+        """
+        email = self.cleaned_data.get('email')
+        if email and UserModel.objects.filter(email__iexact=email).exists():
+            # Use iexact for case-insensitive comparison
+            raise ValidationError("An account with this email address already exists.")
+        return email
 
     def save(self, commit=True):
         """
