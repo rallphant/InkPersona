@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkPersona - Chat with Literary Characters</title>
+    <link rel="stylesheet" href="{% static 'css/landing_style.css' %}">
+</head>
+<body class="landing-body">
+
+    <div class="background-slideshow">
+        {% if characters %}
+            {% for character in characters %}
+                <div class="bg-slide" style="background-image: url('{{ character.image.url }}');"></div>
+            {% endfor %}
+        {% else %}
+            {# Fallback background if no characters have images #}
+            <div class="bg-slide" style="background: linear-gradient(45deg, #6a11cb, #2575fc);"></div>
+        {% endif %}
+    </div>
+
+    <div class="scroll-container">
+
+        <section class="snap-section title-section">
+            <div class="content">
+                <div class="initial-title">
+                    <h1>InkPersona</h1>
+                </div>
+                <div class="scroll-indicator">
+                    <span>Scroll Down</span>
+                    <div class="arrows">
+                        <span>&darr;</span> {# Down arrow #}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="snap-section revealed-section">
+            <div class="content">
+                <div class="revealed-content">
+                    <p>Chat with your favorite book characters.</p>
+                    <footer>
+                        <a href="{% url 'login' %}" class="cta-button">
+                            Try it now <span class="arrow">&rarr;</span>
+                        </a>
+                    </footer>
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- End scroll-container -->
+
+    <script src="{% static 'js/landing_scroll.js' %}"></script>
+</body>
+</html>

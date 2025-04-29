@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Characters - InkPersona{% endblock %}
+
+{% block content %}
+
+{# Section 1: About InkPersona #}
+<section class="section about-section">
+    <div class="container">
+        <h2 class="section-title">About InkPersona</h2>
+
+        <div class="about-image-container">
+            <img src="{% static 'images/quill_ink.png' %}" alt="Quill and Ink" class="about-image">
+        </div>
+
+        <p>
+            Welcome to InkPersona! Step into your favorite stories and chat directly
+            with the characters you love.
+        </p>
+        <p>
+            Explore our growing library, choose a character, and start a conversation
+            powered by AI designed to capture their unique voice and personality.
+            Ask questions, explore scenarios, and experience literature in a whole new way!
+        </p>
+    </div>
+</section>
+
+{# Section 2: How It Works #}
+<section class="section how-it-works-section">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📖</div>
+                <h3>Select a Character</h3>
+                <p>Choose from our curated list of literary figures.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <h3>Start a Conversation</h3>
+                <p>Chat through text with your favorite character.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔍</div>
+                <h3>Explore Stories</h3>
+                <p>Ask about events in the book or explore hypothetical scenarios.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Section 3: Characters Grid #}
+<section class="section characters-grid-section" id="characters-grid-section">
+    <div class="container">
+        <h2 class="section-title">Meet the Characters</h2>
+        <p class="section-intro">Interact with famous characters from classic literature through our AI-powered experience.</p>
+
+        <div class="character-grid">
+            {% for character in characters %}
+            <div class="character-card">
+                {# <div class="character-emoji">{{ character.emoji|default:"📚" }}</div> #}
+
+                <div class="character-image-container">
+                    {% if character.image %}
+                        <img src="{{ character.image.url }}" alt="{{ character.name }}" class="character-image">
+                    {% else %}
+                    <img src="{% static 'images/placeholder.png' %}" alt="Placeholder Image" class="character-image character-image-placeholder-img">
+                    {% endif %}
+                </div>
+
+                <div class="character-card-content">
+                    <h3 class="character-name">{{ character.name }}</h3>
+                    <p class="character-book">{{ character.book }}</p>
+                    <p class="character-author">by {{ character.author }}</p>
+                    <a href="{% url 'characters:character_detail' character.id %}?new=true" class="btn">Chat Now</a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="no-characters" style="text-align: center; grid-column: 1 / -1;">No characters available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

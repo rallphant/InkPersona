@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %} {# Ensure static is loaded #}
+
+{% block title %}{{ character.name }} - InkPersona{% endblock %}
+
+{% block content %}
+
+    {# --- Section 1: Character Header & Description --- #}
+    <section class="section description-section">
+        <div class="container">
+            <div class="back-button-container detail-back-button">
+                <a href="{% url 'characters:character_list' %}" class="btn btn-back">&larr; Back to Characters</a>
+            </div>
+
+            <div class="character-header character-header-standalone">
+                {% if character.image %}
+                <div class="character-detail-image-container">
+                     <img src="{{ character.image.url }}" alt="{{ character.name }}" class="character-detail-image">
+                </div>
+                {% endif %}
+                <h2 class="character-name">{{ character.name }}</h2>
+                <p class="character-book">{{ character.book }} by {{ character.author }}</p>
+            </div>
+
+            <div class="character-description character-description-standalone">
+                <p>{{ character.description }}</p>
+                {% if character.tags %}
+                <div class="character-tags">
+                    {% for tag in character.tags %}
+                    <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+
+    {# --- Section 2: Chat Section --- #}
+    <section class="section chat-reveal-section">
+        <div class="container">
+            <div class="chat-box">
+                <div class="chat-container">
+                    <h3 class="chat-title">Chat with {{ character.name }}</h3>
+                    <div class="chat-messages" id="chat-messages">
+                        {% if message_history %}
+                            {% for message in message_history %}
+                                <div class="message {% if message.is_user_message %}user{% else %}character{% endif %}">
+                                    <p>{{ message.message_text }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="message system">
+                                <p>You are now chatting with {{ character.name }}. Ask anything!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <form id="chat-form" class="chat-form" data-is-new="{{ is_new_conversation|yesno:'true,false' }}"> {# <-- Add data attribute #}
+                        {% csrf_token %}
+                        <input type="hidden" name="character_id" value="{{ character.id }}">
+                        <input type="text" name="message" id="user-message" placeholder="Type your message..." required>
+                        <button type="submit" class="btn">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chat-form');
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-message');
+            const characterIdInput = document.querySelector('input[name="character_id"]');
+            const startNew = chatForm.dataset.isNew === 'true';
+            let conversationStarted = false; // Flag to track if the first message in a 'new' convo has been sent
+
+            // Basic check for essential elements
+            if (!chatForm || !chatMessages || !userInput || !characterIdInput) {
+                console.error("Chat UI elements not found!");
+                return; // Stop execution if elements are missing
+            }
+            const characterId = characterIdInput.value; // Get character ID once
+
+            // Scroll to the bottom of the chat messages on initial load
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Function to append a new message to the chat display
+            function appendMessage(type, text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`; // e.g., 'message user', 'message character', 'message system'
+                const p = document.createElement('p');
+                p.textContent = text;
+                messageDiv.appendChild(p);
+                chatMessages.appendChild(messageDiv);
+                // Scroll to the bottom after adding the message
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Handle form submission
+            chatForm.addEventListener('submit', async function(event) {
+                console.log("Chat form submit event fired!");
+                event.preventDefault(); // Prevent default form submission
+
+                const userMessage = userInput.value.trim();
+                if (!userMessage) {
+                    console.log("Message input is empty. Aborting send.");
+                    return; // Don't send empty messages
+                }
+
+                console.log("User Message:", userMessage);
+                console.log("Character ID:", characterId);
+
+                // Display user's message immediately
+                appendMessage('user', userMessage);
+                userInput.value = ''; // Clear the input field
+
+                // Determine if the 'start_new' flag should be sent to the API
+                let shouldStartNewApi = false;
+                if (startNew && !conversationStarted) {
+                    // Only send start_new=true for the very first message if the page was loaded with ?new=true
+                    shouldStartNewApi = true;
+                    conversationStarted = true; // Mark that the first message has been sent
+                    console.log("Flagging this as the first message for a 'new' conversation.");
+                }
+
+                // Display a loading indicator
+                const loadingMessage = document.createElement('div');
+                loadingMessage.className = 'message loading system';
+                loadingMessage.innerHTML = '<p>Thinking...</p>';
+                chatMessages.appendChild(loadingMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Get CSRF token for the POST request
+                let csrfToken = null;
+                try {
+                    csrfToken = getCookie('csrftoken');
+                    console.log("CSRF Token:", csrfToken);
+                    if (!csrfToken) {
+                         console.error("CSRF Token not found! Fetch will likely fail.");
+                    }
+                } catch (e) {
+                    console.error("Error getting CSRF token:", e);
+                }
+
+
+                // Send message to the backend API
+                try {
+                    console.log("Attempting fetch to /app/api/chat/ with start_new:", shouldStartNewApi);
+
+                    const response = await fetch('/app/api/chat/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken // Include CSRF token
+                        },
+                        body: JSON.stringify({
+                            character_id: characterId,
+                            message: userMessage,
+                            start_new: shouldStartNewApi // Send the flag
+                        })
+                    });
+
+                    console.log("Fetch response status:", response.status);
+
+                    // Remove loading indicator regardless of success or failure
+                    chatMessages.removeChild(loadingMessage);
+
+                    if (!response.ok) {
+                        // Try to parse error JSON, provide fallback message
+                        const errorData = await response.json().catch(() => ({ error: `Server responded with status ${response.status}` }));
+                        console.error('API Error Response:', errorData);
+                        appendMessage('system error', `Error: ${errorData.error || response.statusText}`);
+                        return; // Stop processing on error
+                    }
+
+                    // Process successful response
+                    const data = await response.json();
+                    console.log("API Success Response Data:", data);
+
+                    if (data.response) {
+                        // Display character's response
+                        appendMessage('character', data.response);
+                    } else if (data.error) {
+                         // Display error message from backend if provided
+                         appendMessage('system error', `Error: ${data.error}`);
+                    } else {
+                         // Handle unexpected empty success response
+                         appendMessage('system error', 'Received an empty response from the server.');
+                    }
+
+                } catch (error) {
+                    // Handle network errors or issues during fetch/JSON parsing
+                    if (chatMessages.contains(loadingMessage)) { // Ensure loading message exists before removing
+                        chatMessages.removeChild(loadingMessage);
+                    }
+                    console.error('Error during fetch or response processing:', error);
+                    appendMessage('system error', 'Network error or issue processing response.');
+                }
+            });
+
+            // Helper function to get a cookie value by name (needed for CSRF)
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+
+{% endblock %}

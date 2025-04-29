@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Logged Out - InkPersona{% endblock %}
+
+{% block content %}
+{# Background slideshow using character images passed from the view #}
+<div class="background-slideshow logout-bg-slideshow">
+    {% if characters %}
+        {% for character in characters %}
+            {# Reuses the same slide structure as the landing page #}
+            <div class="bg-slide" style="background-image: url('{{ character.image.url }}');"></div>
+        {% endfor %}
+    {% else %}
+        {# Fallback background if no character images are available #}
+        <div class="bg-slide" style="background: linear-gradient(45deg, #333, #111);"></div>
+    {% endif %}
+</div>
+
+{# Main content section for the logout message #}
+<section class="section logged-out-section">
+    <div class="container">
+        <div class="logout-message-container">
+
+            <div class="form-logo-container">
+                <img src="{% static 'images/quill_ink.png' %}" alt="InkPersona Logo" class="form-logo">
+            </div>
+
+            <h2 class="logout-title">Logged Out</h2>
+            <p class="logout-text">You have been successfully logged out.</p>
+            <p class="logout-text">Hope to see you back soon!</p>
+            <p class="redirect-info">(You will be redirected to the homepage shortly...)</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+    {# Include any scripts from the base template's extra_scripts block #}
+    {{ block.super }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Automatically redirect to the landing page after a delay
+            setTimeout(function() {
+                window.location.href = "{% url 'landing_page' %}";
+            }, 10000); // 10000 milliseconds = 10 seconds
+        });
+    </script>
+{% endblock %}

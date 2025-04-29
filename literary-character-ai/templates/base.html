@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}InkPersona{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/quill_ink.png' %}">
+
+    {% block extra_head %}{% endblock %} {# For page-specific head elements #}
+</head>
+<body class="app-body">
+    <header class="app-header">
+        <div class="container">
+            <h1 class="site-title"><a href="{% url 'landing_page' %}" class="site-title-link">InkPersona</a></h1>
+
+            {# Hide main navigation on login/signup pages #}
+            {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' %}
+            <nav>
+                <ul>
+                    <li><a href="{% url 'characters:character_list' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'characters:conversation_history' %}">History</a></li>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                        <li><span>Hi {{ user.username }}!</span></li>
+                        <li>
+                            {# Use a form for logout to ensure POST request #}
+                            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-button-link">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        </div>
+    </header>
+
+    <main>
+        {# Main content block for child templates #}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <p>&copy; {% now "Y" %} InkPersona</p> {# Dynamic year #}
+        </div>
+    </footer>
+
+    {# Block for page-specific JavaScript files #}
+    {% block extra_scripts %}
+        <script src="{% static 'js/app_scroll.js' %}"></script> {# Common scroll script #}
+    {% endblock %}
+</body>
+</html>
