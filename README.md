@@ -15,7 +15,7 @@ InkPersona es una aplicación web que permite a los usuarios interactuar y conve
 *   **Backend:** Python, Django, Django REST Framework
 *   **Frontend:** HTML, CSS, JavaScript
 *   **IA Conversacional:** Groq API (utilizando modelos como Llama 3)
-*   **Base de Datos:** SQLite (desarrollo), PostgreSQL (recomendado para producción)
+*   **Base de Datos:** SQLite (desarrollo)
 *   **Control de Versiones:** Git
 
 ## Instalación y Puesta en Marcha
@@ -50,7 +50,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local:
 5.  **Configurar Variables de Entorno:**
     Crea un archivo `.env` en la raíz del proyecto (junto a `manage.py`) y añade las siguientes variables (ajusta los valores según sea necesario):
     ```dotenv
-    DJANGO_SECRET_KEY='tu_clave_secreta_aqui' # Cambia esto por una clave segura
+    DJANGO_SECRET_KEY='tu_clave_secreta_aqui'
     DEBUG=True
     GROQ_API_KEY='tu_api_key_de_groq'
     GROQ_MODEL='llama3-8b-8192' # O el modelo que prefieras usar
