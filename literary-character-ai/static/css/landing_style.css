@@ -1,12 +1,11 @@
 /* --- Basic Setup --- */
 html {
-    scroll-behavior: smooth; /* Optional: Smooth scrolling between snaps */
+    scroll-behavior: smooth;
 }
-
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%; /* Needed for scroll snap container */
+    height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
 }
@@ -18,7 +17,7 @@ body, html {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; /* Behind all other content */
+    z-index: -1;
     overflow: hidden;
 }
 
@@ -30,60 +29,51 @@ body, html {
     height: 100%;
     background-size: cover;
     background-position: center center;
-    opacity: 0; /* Start hidden for animation logic */
+    opacity: 0;
     animation: fadeSlide 24s infinite linear;
-    filter: brightness(0.6) contrast(1.1); /* Initial visual filter */
+    filter: brightness(0.6) contrast(1.1);
 }
 
-/* Stagger animation delays for the 4 slides */
 .bg-slide:nth-child(1) { animation-delay: 0s; }
 .bg-slide:nth-child(2) { animation-delay: 6s; }
 .bg-slide:nth-child(3) { animation-delay: 12s; }
 .bg-slide:nth-child(4) { animation-delay: 18s; }
 
-/* Keyframes for the background image fade and slight zoom effect */
 @keyframes fadeSlide {
-    /* Fade In */
-    0% { opacity: 0; transform: scale(1.05); } /* Start slightly zoomed */
-    5% { opacity: 0.35; transform: scale(1); } /* Quick fade in, zoom out */
-    /* Hold Visible */
-    25% { opacity: 0.75; transform: scale(1); } /* Stay visible */
-    /* Fade Out */
-    30% { opacity: 0; transform: scale(1); } /* Quick fade out */
-    /* Stay Hidden */
-    100% { opacity: 0; transform: scale(1); } /* Remain hidden until the next cycle */
+    0% { opacity: 0; transform: scale(1.05); }
+    5% { opacity: 0.35; transform: scale(1); }
+    25% { opacity: 0.75; transform: scale(1); }
+    30% { opacity: 0; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
 }
 
-/* Style for when revealed content is active (activated by JS) */
 .landing-body.revealed-active .background-slideshow .bg-slide {
-    filter: brightness(0.75) contrast(1.1); /* Slightly brighten background when content is shown */
+    filter: brightness(0.75) contrast(1.1);
 }
 
 /* --- Scroll Container & Snapping --- */
 .scroll-container {
-    height: 100vh; /* Take full viewport height */
-    overflow-y: scroll; /* Enable vertical scrolling */
-    scroll-snap-type: y mandatory; /* Snap vertically, force snapping */
-    position: relative; /* Ensure it's part of the stacking context */
-    z-index: 1; /* Above background slideshow */
-    background-color: transparent; /* Allow background slideshow to be visible */
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
 }
 
-/* Black overlay curtain effect using ::before pseudo-element */
+/* Curtain effect */
 .scroll-container::before {
-    content: ''; /* Required for pseudo-elements */
-    position: absolute; /* Position relative to scroll-container */
+    content: '';
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Covers the first section's viewport height */
-    background-color: #111; /* The black curtain */
-    z-index: 0; /* Position it between slideshow (-1) and content (1) */
-    transition: transform 0.8s ease-in-out; /* Animate the curtain sliding up */
-    transform: translateY(0); /* Initial position */
+    height: 100%;
+    background-color: #111;
+    z-index: 0;
+    transition: transform 0.8s ease-in-out;
+    transform: translateY(0);
 }
-
-/* When revealed-active class is added, slide the curtain up */
 .landing-body.revealed-active .scroll-container::before {
     transform: translateY(-100%);
 }
@@ -92,20 +82,20 @@ body, html {
 .snap-section {
     height: 100vh; /* Each section takes full viewport height */
     width: 100%;
-    scroll-snap-align: center; /* Snap the center of the section to the center of the viewport */
-    display: flex; /* Use flexbox for centering content */
+    scroll-snap-align: center;
+    display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    position: relative; /* Needed for absolute positioning of scroll indicator */
-    background-color: transparent; /* Allow background slideshow to be visible */
+    position: relative;
+    background-color: transparent;
 }
 
 /* --- Content Alignment within sections --- */
 .content {
     max-width: 800px;
     width: 90%;
-    padding: 0; /* Remove padding that might interfere with flex centering */
+    padding: 0;
     margin: 0;
 }
 
@@ -116,15 +106,14 @@ body, html {
 
 .initial-title h1 {
     font-size: 7em;
-    margin: 0 0 20px 0; /* Add some margin below title */
+    margin: 0 0 20px 0;
     font-weight: 200;
     letter-spacing: 3px;
     color: #f0f0f0;
     text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
-    animation: fadeInTitle 1.5s ease-out forwards; /* Keep entry animation */
+    animation: fadeInTitle 1.5s ease-out forwards;
 }
 
-/* Initial title fade-in animation */
 @keyframes fadeInTitle {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
@@ -132,31 +121,27 @@ body, html {
 
 /* --- Scroll Down Indicator --- */
 .scroll-indicator {
-    position: absolute; /* Position relative to the snap-section */
-    bottom: 30px; /* Position near the bottom */
+    position: absolute;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     opacity: 1;
-    transition: opacity 0.5s ease; /* Fade out when hidden */
+    transition: opacity 0.5s ease;
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.9em;
-    z-index: 2; /* Ensure it's above content if overlapping */
+    z-index: 2;
 }
-
-/* Class to hide the indicator (added via JS) */
 .scroll-indicator.hidden {
     opacity: 0;
-    pointer-events: none; /* Prevent interaction when hidden */
+    pointer-events: none;
 }
-
 .scroll-indicator .arrows {
     margin-top: 5px;
-    animation: bounce 2s infinite ease-in-out; /* Bouncing animation */
+    animation: bounce 2s infinite ease-in-out;
 }
-
 .scroll-indicator .arrows span {
     font-size: 1.5em;
-    display: block; /* Ensure animation works correctly */
+    display: block;
 }
 
 /* Bouncing animation for scroll indicator arrows */
@@ -175,23 +160,22 @@ body, html {
 /* --- Revealed Content Styling (Second Section) --- */
 .revealed-content {
     width: 100%;
-    margin-top: 1em; /* Add some space above the text */
+    margin-top: 1em;
 }
-
 .revealed-content p {
     font-size: 2em;
     font-weight: bold;
     margin-bottom: 1.5em;
-    color: #f0f0f0; /* Changed to light color for better contrast on dark bg */
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.8); /* Added shadow for readability */
+    color: #f0f0f0;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
 }
 
 /* --- CTA Button Styles --- */
 .cta-button {
     display: inline-block;
     padding: 14px 35px;
-    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
-    color: #333; /* Dark text provides good contrast */
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #333;
     text-decoration: none;
     font-size: 1.2em;
     font-weight: bold;
@@ -199,21 +183,32 @@ body, html {
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     border: none;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
-
 .cta-button:hover {
-    background-color: #ffffff; /* Solid white on hover */
+    background-color: #ffffff;
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); /* Slightly enhance shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
-
-/* Styles for arrow inside button (if used) */
 .cta-button .arrow {
     margin-left: 8px;
     transition: transform 0.2s ease;
 }
-
 .cta-button:hover .arrow {
     transform: translateX(4px);
+}
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 768px) {
+    .initial-title h1 {
+        font-size: 3.5em;
+    }
+    .revealed-content p {
+        font-size: 1.4em;
+        margin-bottom: 1em;
+    }
+    .cta-button {
+        padding: 10px 25px;
+        font-size: 1em;
+    }
 }

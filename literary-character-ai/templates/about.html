@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
-{% load static %} {# Load static tag if needed for images/CSS specific to this page #}
+{% load static %}
 
 {% block title %}About - InkPersona{% endblock %}
 
 {% block content %}
 {# Main section for the About page content #}
 <section class="section about-section">
-    {# Assuming the base template or CSS handles the main container #}
-    {# If not, wrap the content below in <div class="container"> #}
+
 
     <h2 class="section-title">About InkPersona</h2>
 
@@ -22,12 +21,12 @@
         <p>Our system utilizes advanced AI models (currently via the Groq API) trained on book excerpts and character analyses. This allows the AI to maintain in-character responses aligned with the book's timeline and the character's personality. Users can ask about events in the book, explore themes, or even discuss hypothetical scenarios beyond the book's ending.</p>
 
         <h3>Current Character Lineup</h3>
-        {# Consider making this list dynamic if possible #}
+        
         <ul class="character-list">
             <li>The Little Prince from Antoine de Saint-Exupéry's "The Little Prince"</li>
             <li>Big Brother from George Orwell's "1984"</li>
             <li>Ivan Ilyich from Leo Tolstoy's "The Death of Ivan Ilyich"</li>
-            {# Add more characters as needed #}
+            <li>Don Quijote from Miguel de Cervante's "Don Quijote de la Mancha"</li>
         </ul>
 
         <p>We're continuously expanding our character database based on user interest and feedback.</p>
