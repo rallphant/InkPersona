@@ -10,7 +10,7 @@ class CustomUserCreationForm(UserCreationForm):
     """
     A custom user creation form that requires email and includes it in the fields.
     """
-    # Add email field and make it required for signup
+    # Adding an email field and making it required for signup
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={'autocomplete': 'email'})

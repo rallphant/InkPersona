@@ -75,7 +75,5 @@ class ChatMessage(models.Model):
     def __str__(self):
         """String representation of the chat message."""
         sender = "User" if self.is_user_message else "Character"
-        # Format timestamp for better readability if needed, otherwise default is fine
-        # formatted_time = self.timestamp.strftime('%Y-%m-%d %H:%M')
         return f"{sender} message at {self.timestamp}"
 

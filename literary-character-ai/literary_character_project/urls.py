@@ -1,13 +1,10 @@
 # literary_character_project/urls.py
-
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-
-# Import views/forms from the 'characters' app
-from characters.views import landing_page, about, signup, CustomLogoutView
+from characters.views import landing_page, signup, CustomLogoutView
 from characters.forms import EmailLoginForm
 
 urlpatterns = [
@@ -18,13 +15,12 @@ urlpatterns = [
 
     # Site-wide pages
     path('', landing_page, name='landing_page'),
-    path('about/', about, name='about'),
 
     # Authentication URLs
     path('accounts/signup/', signup, name='signup'), # Custom signup view
     path('accounts/login/', auth_views.LoginView.as_view(
             template_name='registration/login.html',
-            authentication_form=EmailLoginForm # Use custom email login form
+            authentication_form=EmailLoginForm # Using a custom email login form
         ), name='login'),
     path('accounts/logout/', CustomLogoutView.as_view(), name='logout'), # Custom logout view
 

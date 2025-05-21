@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Shrink Header on Scroll Logic ---
     if (header && mainElement) {
         const handleHeaderScroll = () => {
-            // Add 'scrolled' class to header if main content is scrolled down
+            // Adding 'scrolled' class to header if main content is scrolled down
             if (mainElement.scrollTop > 10) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
         };
-        // Listen to scroll events on the main element
+        // Listening to scroll events on the main element
         mainElement.addEventListener('scroll', handleHeaderScroll, { passive: true });
         handleHeaderScroll(); // Run once on load to set initial state
     } else {
@@ -23,16 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Section Activation on Scroll Logic ---
     if (sections.length > 0 && mainElement) {
-        let currentlyActiveSection = null; // Track the currently visible section
+        let currentlyActiveSection = null; // Tracking the currently visible section
 
         const sectionOptions = {
-            root: mainElement, // Observe intersections within the main scrollable area
+            root: mainElement, // Observing intersections within the main scrollable area
             threshold: 0.1 // Trigger when 10% of the section is visible
         };
 
         const sectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
-                // Check if the section is intersecting enough to be considered active
+                // Checking if the section is intersecting enough to be considered active
                 if (entry.isIntersecting && entry.intersectionRatio >= sectionOptions.threshold) {
                     // Activate the new section if it's not already the active one
                     if (entry.target !== currentlyActiveSection) {

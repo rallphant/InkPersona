@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const intersectionCallback = (entries, observer) => {
-        // Since we only observe one entry, we can access it directly
+        // Since we only observe one entry, it can be accessed directly
         const entry = entries[0];
 
-        // Check if it's intersecting enough to be considered 'active'
+        // Checking if it's intersecting enough to be considered 'active'
         if (entry.isIntersecting && entry.intersectionRatio >= observerOptions.threshold) {
             // Add class only if it's not already present
             if (!body.classList.contains('revealed-active')) {

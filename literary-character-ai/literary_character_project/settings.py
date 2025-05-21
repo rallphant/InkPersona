@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', # For the API endpoints
-    'characters',     # Your main application
+    'characters',     # The main application
 ]
 
 MIDDLEWARE = [
@@ -135,10 +135,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', # Keep default backend for admin login etc.
 ]
 
-# These settings are often used by packages like django-allauth,
-# but don't directly affect standard Django auth unless your custom User model enforces them.
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_UNIQUE_EMAIL = True
 
 # --- Logging Configuration (Optional but Recommended) ---
 # Example basic logging setup - configure further as needed

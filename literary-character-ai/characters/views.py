@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-
 from .models import LiteraryCharacter, Conversation
 from .forms import CustomUserCreationForm
 
@@ -42,9 +41,6 @@ def character_detail(request, character_id):
     }
     return render(request, 'characters/character_detail.html', context)
 
-def about(request):
-    """Displays the about page."""
-    return render(request, 'about.html')
 
 def signup(request):
     """Handles user registration."""

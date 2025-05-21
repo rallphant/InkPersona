@@ -26,7 +26,6 @@ except Exception as e:
     groq_client = None
 
 # --- API Configuration ---
-# Consider moving these to settings.py or environment variables
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama3-8b-8192")
 MAX_HISTORY_MESSAGES = 50 # Number of previous messages to include in history
 MAX_TOKENS_RESPONSE = 200
@@ -115,9 +114,6 @@ Respond concisely (1-2 paragraphs) based on this persona. If asked about events 
                 model=GROQ_MODEL,
                 temperature=TEMPERATURE,
                 max_tokens=MAX_TOKENS_RESPONSE,
-                # top_p=0.9, # Optional
-                # stop=None, # Optional stop sequences
-                
             )
             # Extract the response content
             if chat_completion.choices:
