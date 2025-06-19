@@ -1,98 +1,97 @@
-# InkPersona: Chatea con Personajes Literarios
+# InkPersona: Chat with Literary Characters
 
-InkPersona es una aplicación web que permite a los usuarios interactuar y conversar con representaciones de Inteligencia Artificial (IA) de personajes icónicos de la literatura clásica.
+InkPersona is a web application that allows users to interact and converse with AI representations of iconic characters from classic literature.
 
-## Características Principales
+## Main Features
 
-*   **Exploración de Personajes:** Navega por un catálogo de personajes literarios con sus detalles (libro, autor, descripción).
-*   **Chat con IA:** Mantén conversaciones dinámicas con la IA que emula la personalidad y el conocimiento del personaje seleccionado.
-*   **Autenticación de Usuarios:** Registro e inicio de sesión para una experiencia personalizada.
-*   **Historial de Conversaciones:** Revisa y gestiona tus conversaciones pasadas con diferentes personajes.
-*   **Interfaz Responsiva:** Diseño adaptable a diferentes tamaños de pantalla.
+* **Character Exploration:** Browse a catalog of literary characters with their details (book, author, description).
+* **AI Chat:** Engage in dynamic conversations with AI that emulates the personality and knowledge of the selected character.
+* **User Authentication:** Register and log in for a personalized experience.
+* **Conversation History:** Review and manage your past conversations with different characters.
+* **Responsive Interface:** Design adaptable to various screen sizes.
 
-## Tecnologías Utilizadas
+## Technologies Used
 
-*   **Backend:** Python, Django, Django REST Framework
-*   **Frontend:** HTML, CSS, JavaScript
-*   **IA Conversacional:** Groq API (utilizando modelos como Llama 3)
-*   **Base de Datos:** SQLite (desarrollo)
-*   **Control de Versiones:** Git
+* **Backend:** Python, Django, Django REST Framework
+* **Frontend:** HTML, CSS, JavaScript
+* **Conversational AI:** Groq API (using models such as Llama 3)
+* **Database:** SQLite (development)
+* **Version Control:** Git
 
-## Instalación y Puesta en Marcha
+## Installation and Setup
 
-Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local:
+Follow these steps to configure and run the project in your local environment:
 
-1.  **Prerrequisitos:**
-    *   Python 3.8 o superior
-    *   pip (gestor de paquetes de Python)
-    *   `virtualenv` (recomendado para crear entornos virtuales)
+1. **Prerequisites:**
+    * Python 3.8 or higher
+    * pip (Python package manager)
+    * `virtualenv` (recommended for creating virtual environments)
 
-2.  **Clonar el Repositorio:**
+2. **Clone the Repository:**
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone <REPOSITORY_URL>
     cd literary-character-ai
     ```
 
-3.  **Crear y Activar Entorno Virtual:**
+3. **Create and Activate Virtual Environment:**
     ```bash
     python -m venv venv
-    # En Windows:
+    # On Windows:
     .\venv\Scripts\activate
-    # En macOS/Linux:
+    # On macOS/Linux:
     source venv/bin/activate
     ```
 
-4.  **Instalar Dependencias:**
+4. **Install Dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-5.  **Configurar Variables de Entorno:**
-    Crea un archivo `.env` en la raíz del proyecto (junto a `manage.py`) y añade las siguientes variables (ajusta los valores según sea necesario):
+5. **Configure Environment Variables:**
+    Create a `.env` file in the root directory of the project (next to `manage.py`) and add the following variables (adjust values as needed):
     ```dotenv
-    DJANGO_SECRET_KEY='tu_clave_secreta_aqui'
+    DJANGO_SECRET_KEY='your_secret_key_here'
     DEBUG=True
-    GROQ_API_KEY='tu_api_key_de_groq'
-    GROQ_MODEL='llama3-8b-8192' # O el modelo que prefieras usar
-    # Configuración de base de datos (opcional, por defecto usa SQLite)
+    GROQ_API_KEY='your_groq_api_key_here'
+    GROQ_MODEL='llama3-8b-8192' # Or the model you prefer to use
+    # Database configuration (optional, SQLite is used by default)
     # DATABASE_URL='postgres://user:password@host:port/dbname'
     ```
-    *   **IMPORTANTE:** Asegúrate de que `GROQ_API_KEY` contenga una clave válida obtenida de GroqCloud.
+    * **IMPORTANT:** Ensure that `GROQ_API_KEY` contains a valid key obtained from GroqCloud.
 
-6.  **Aplicar Migraciones de Base de Datos:**
+6. **Apply Database Migrations:**
     ```bash
     python manage.py migrate
     ```
 
-7.  **Crear un Superusuario (para acceder al Admin):**
+7. **Create a Superuser (to access the Admin):**
     ```bash
     python manage.py createsuperuser
     ```
-    Sigue las instrucciones para crear tu cuenta de administrador.
+    Follow the prompts to create your admin account.
 
-8.  **Cargar Datos Iniciales (Opcional):**
-    *   Si tienes un archivo de *fixtures* (ej. `characters_data.json`) para cargar personajes iniciales:
+8. **Load Initial Data (Optional):**
+    * If you have a *fixtures* file (e.g., `characters_data.json`) to load initial characters:
         ```bash
         python manage.py loaddata characters_data.json
         ```
-    *   Alternativamente, puedes añadir personajes manualmente a través del panel de administración de Django (`/admin/`).
+    * Alternatively, you can manually add characters through the Django admin panel (`/admin/`).
 
-9.  **Ejecutar el Servidor de Desarrollo:**
+9. **Run the Development Server:**
     ```bash
     python manage.py runserver
     ```
 
-10. **Acceder a la Aplicación:**
-    Abre tu navegador y ve a `http://127.0.0.1:8000/`.
+10. **Access the Application:**
+    Open your browser and go to `http://127.0.0.1:8000/`.
 
-## Uso
+## Usage
 
-*   Visita la página principal para ver los personajes.
-*   Regístrate o inicia sesión para poder chatear.
-*   Haz clic en un personaje para ver sus detalles e iniciar una conversación.
-*   Accede a tu historial desde el menú de navegación (si estás logueado).
+* Visit the homepage to view the characters.
+* Register or log in to be able to chat.
+* Click on a character to view details and start a conversation.
+* Access your chat history from the navigation menu (if logged in).
 
 ## API
 
-*   El endpoint principal para la interacción del chat es `/characters/api/chat/` (requiere autenticación y método POST).
-
+* The main endpoint for chat interaction is `/characters/api/chat/` (requires authentication and POST method).
